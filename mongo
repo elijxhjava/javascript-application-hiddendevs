@@ -9,7 +9,7 @@ export async function connectMongo() {
   if (client) return client;
 
   const uri = process.env.MONGODB_URI;
-  if (!uri) throw new Error("Missing MONGODB_URI");
+  if (!uri) throw new Error("mongodb url error");
 
   client = new MongoClient(uri, {
     serverSelectionTimeoutMS: 10000,
@@ -17,13 +17,13 @@ export async function connectMongo() {
 
   await client.connect();
 
-  console.log("Mongo connected");
+  console.log("mongo connected");
 
   return client;
 }
 
 function db() {
-  if (!client) throw new Error("Mongo not connected");
+  if (!client) throw new Error("mongo isnt connected");
   return client.db(DB_NAME);
 }
 
