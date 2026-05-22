@@ -6,9 +6,9 @@
 
 ## Overview
 
-This repository contains a collection of JavaScript projects, systems, and development work for my application for the JavaScript role in HiddenDevs
+This repository contains a collection of JavaScript code from my personal project Cool Cola and Cool Cola Verification 
 
-these projects show my experience with JavaScript development and building functional apps.
+these files show my experience with JavaScript development and building functional apps.
 
 ---
 
