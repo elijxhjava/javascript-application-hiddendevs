@@ -1,59 +1,23 @@
-# JavaScript Application - Hidden Devs
+# HiddenDevs JavaScript Application
 
-Welcome to the JavaScript Application project!
-
-## Overview
-
-This project is a JavaScript application built for [Hidden Devs](https://hiddendevs.com/).
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js (v14 or higher)
-- npm or yarn
-
-### Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/elijxhjava/javascript-application-hiddendevs.git
-cd javascript-application-hiddendevs
-```
-
-2. Install dependencies:
-```bash
-npm install
-# or
-yarn install
-```
-
-### Running the Application
-
-```bash
-npm start
-# or
-yarn start
-```
-
-## Project Structure
-
-- `src/` - Source code
-- `public/` - Static assets
-- `dist/` - Build output
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is open source and available under the MIT License.
-
-## Support
-
-For questions or issues, please open a GitHub issue or contact us at [your-email@example.com].
+> Welcome to my JavaScript role application for HiddenDevs.
 
 ---
 
-**Built with ❤️ by elijxhjava**
+## Overview
+
+This repository contains a collection of JavaScript projects, systems, and development work for my application for the JavaScript role in HiddenDevs
+
+these projects show my experience with JavaScript development and building functional apps.
+
+---
+
+## Tech
+
+```js
+JavaScript (ES6+)
+Node.js
+HTML / CSS
+Discord.js
+MongoDB
+Git
