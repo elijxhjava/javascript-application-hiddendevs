@@ -1,0 +1,41 @@
+import { getVerifiedUser } from "../../db/mongo.js";
+
+export const name = "grb";
+export const ownerOnly = true;
+export const description = "displays a verified users roblox information.";
+
+/**
+ * @param {import("discord.js").Message} message
+ * @param {string[]} args
+ */
+export async function execute(message, args) {
+  const userId = args[0]?.replace(/\D/g, "");
+
+  if (!userId) {
+    await message.reply("Usage: `-grb <@user | userId>`");
+    return;
+  }
+
+  let discordUser;
+  try {
+    discordUser = await message.client.users.fetch(userId);
+  } catch {
+    await message.reply("Couldn't find a verified user with that ID.");
+    return;
+  }
+
+  const record = await getVerifiedUser(discordUser.id);
+
+  if (!record) {
+    await message.reply("this user does not have a verified roblox account.");
+    return;
+  }
+
+  const robloxUsername = record.robloxUsername ?? "Unknown";
+  const robloxId = record.robloxUserId ?? record.robloxId ?? "unknown";
+  const profileUrl = `https://www.roblox.com/users/${robloxId}/profile`;
+
+  await message.channel.send(
+    `Roblox: ${robloxUsername} | ${robloxId} | ${profileUrl}`
+  );
+}
