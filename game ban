@@ -1,0 +1,93 @@
+import { EmbedBuilder } from "discord.js";
+import { getVerifiedUser } from "../../db/mongo.js";
+import { gameBanUser } from "../../roblox/api.js";
+
+export const name = "gb";
+export const ownerOnly = true;
+export const description = "game bans a user from sffb but user must be verified first";
+
+async function resolveRobloxId(arg) {
+  if (!arg) return null;
+
+  const isMention = /^<@!?\d+>$/.test(arg);
+  const digits = arg.replace(/\D/g, "");
+
+  if (!digits) return null;
+
+  if (isMention || digits.length >= 17) {
+    const record = await getVerifiedUser(digits);
+    if (!record) return null;
+
+    const robloxUserId = record.robloxUserId ?? record.robloxId ?? null;
+    if (!robloxUserId) return null;
+
+    return { robloxUserId: String(robloxUserId), source: "discord" };
+  }
+
+  return { robloxUserId: digits, source: "roblox" };
+}
+
+export async function execute(message, args) {
+  if (!args[0]) {
+    await message.reply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(0xf7140f)
+          .setTitle("Correct Usage")
+          .setDescription("`-gb <@mention | Discord ID | Roblox ID> [reason]`"),
+      ],
+    });
+    return;
+  }
+
+  const resolved = await resolveRobloxId(args[0]);
+
+  if (!resolved) {
+    await message.reply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(0xf7140f)
+          .setDescription(
+            "Couldn't find that roblox ID. user must be verified."
+          ),
+      ],
+    });
+    return;
+  }
+
+  const reason = args.slice(1).join(" ") || "No reason provided.";
+
+  try {
+    await gameBanUser(resolved.robloxUserId, reason);
+  } catch (err) {
+    console.error("[gb] API error:", err?.response?.data ?? err);
+
+    await message.reply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(0xf7140f)
+          .setDescription(
+            `failed to game-ban \`${resolved.robloxUserId}\`.\n` +
+            `Error: \`${err?.response?.data?.message ?? err?.message ?? "Unknown"}\``
+          ),
+      ],
+    });
+    return;
+  }
+
+  await message.reply({
+    embeds: [
+      new EmbedBuilder()
+        .setColor(0x57f287)
+        .setTitle("✅ Game Ban Applied")
+        .setDescription(
+          `**Roblox ID:** \`${resolved.robloxUserId}\`\n` +
+          `**Reason:** ${reason}\n` +
+          (resolved.source === "discord"
+            ? `*(resolved from Discord ID \`${args[0].replace(/\D/g, "")}\`)*`
+            : "")
+        )
+        .setTimestamp(),
+    ],
+  });
+}
